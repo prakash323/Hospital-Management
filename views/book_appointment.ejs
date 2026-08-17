@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Book Appointment</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page-shell">
+    <div class="header-card">
+        <h2>Book Appointment</h2>
+    </div>
+    <div class="form-card">
+        <form action="/book-appointment" method="POST">
+            <label>Patient Name:</label>
+            <input type="text" value="<%= patientName %>" readonly>
+
+            <label>Select Doctor:</label>
+            <select name="doctorId" required>
+                <% doctors.forEach(doctor => { %>
+                    <option value="<%= doctor._id %>"><%= doctor.name %> (<%= doctor.specialization %>)</option>
+                <% }) %>
+            </select>
+
+            <label>Select Date:</label>
+            <input type="date" name="appointmentDate" required>
+
+            <button type="submit">Book Appointment</button>
+        </form>
+        <a class="back-link" href="/patient">⬅ Back to Dashboard</a>
+    </div>
+</div>
+</body>
+</html>

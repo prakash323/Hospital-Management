@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Add Prescription</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page-shell">
+    <div class="header-card">
+        <h2>Add Prescription</h2>
+    </div>
+    <div class="form-card">
+        <form action="/add-prescription" method="POST">
+            <label>Select Patient:</label>
+            <select name="patientId" required>
+                <% patients.forEach(patient => { %>
+                    <option value="<%= patient._id %>"><%= patient.name %></option>
+                <% }) %>
+            </select>
+
+            <label>Medicines:</label>
+            <textarea name="medicines" required></textarea>
+
+            <label>Notes:</label>
+            <textarea name="notes"></textarea>
+
+            <label>Bill Amount (INR):</label>
+            <input type="number" name="amount" step="0.01" min="0" required>
+
+            <button type="submit">Add Prescription & Generate Bill</button>
+        </form>
+        <a class="back-link" href="/doctor">⬅ Back to Dashboard</a>
+    </div>
+</div>
+</body>
+</html>

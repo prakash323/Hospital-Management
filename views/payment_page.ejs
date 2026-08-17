@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Payment</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page-shell">
+    <div class="header-card">
+        <h2>Choose Payment Method</h2>
+    </div>
+    <div class="form-card">
+        <form action="/pay-now/<%= bill._id %>" method="POST" id="paymentForm">
+            <input type="hidden" name="paymentMethod" id="paymentMethod" value="">
+            <div class="method" onclick="selectMethod(event, 'upi')">
+                📱 Pay via UPI
+            </div>
+            <div id="upiBox" class="hidden">
+                <input type="text" name="upi" placeholder="Enter UPI ID (example@upi)">
+                <input type="password" name="pin" placeholder="Enter UPI PIN (4 digits)">
+                <small>🔒 Secure UPI Payment</small>
+            </div>
+
+            <div class="method" onclick="selectMethod(event, 'card')">
+                💳 Pay via Card
+            </div>
+            <div id="cardBox" class="hidden">
+                <input type="text" name="card" placeholder="Card Number">
+                <input type="text" name="expiry" placeholder="Expiry (MM/YY)">
+                <input type="text" name="cvv" placeholder="CVV">
+            </div>
+
+            <button type="submit">Confirm Payment of ₹<%= bill.amount %></button>
+        </form>
+        <a class="back-link" href="/pay-bill">⬅ Back</a>
+    </div>
+</div>
+<script>
+let selected = '';
+const paymentMethodInput = document.getElementById('paymentMethod');
+const form = document.getElementById('paymentForm');
+function selectMethod(event, type) {
+    selected = type;
+    paymentMethodInput.value = type;
+    document.querySelectorAll('.method').forEach(m => m.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    document.getElementById('upiBox').style.display = type === 'upi' ? 'block' : 'none';
+    document.getElementById('cardBox').style.display = type === 'card' ? 'block' : 'none';
+}
+
+form.addEventListener('submit', function (event) {
+    if (!selected) {
+        alert('Please select a payment method');
+        event.preventDefault();
+    }
+});
+</script>
+</body>
+</html>

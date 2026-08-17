@@ -1,0 +1,198 @@
+
+body {
+    font-family: Arial;
+    background: #dfe7ef;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    font-size: 40px;
+}
+
+p {
+    color: #555;
+}
+
+.card {
+    background: #f4f6f9;
+    padding: 25px;
+    border-radius: 20px;
+    width: 350px;
+    margin-top: 20px;
+}
+
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.tabs button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: #e0e4ea;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.tabs .active {
+    background: white;
+}
+
+form {
+    text-align: left;
+}
+
+label {
+    margin-top: 10px;
+    display: block;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.password-box {
+    position: relative;
+}
+
+.password-box span {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+}
+
+.roles {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.role {
+    flex: 1;
+    margin: 5px;
+    padding: 15px;
+    text-align: center;
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.active-role {
+    border-color: #2d6cdf;
+    background: #e7f0ff;
+}
+
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background: #2d6cdf;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+}
+/* TAB BUTTONS ONLY */
+.tabs button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    background: #d1d5db;   /* light gray */
+    color: #746969;           /* dark text */
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* ACTIVE TAB */
+.tabs .active {
+    background:  #000;  /* white */
+    color: #ffffff;           /* black text */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+button {
+    background: #2d6cdf;
+}
+/* ONLY SUBMIT BUTTON */
+form button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background: #2d6cdf;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+}
+.container {
+    width: 40%;
+    padding: 20px;
+    box-sizing: border-box;
+    /* width: auto !important; */
+    height: auto !important;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.card {
+    width: 100%;
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#loginForm, #signupForm {
+    width: 100%;
+}
+
+
+#loginForm, #signupForm {
+    display: none;
+}
+
+#loginForm.active, #signupForm.active {
+    display: block;
+}
+
+/* VERY IMPORTANT FIX */
+.card {
+    height: auto !important;
+}
+.card {
+    width: auto !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+

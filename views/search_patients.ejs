@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Search Patients</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page-shell">
+    <div class="header-card">
+        <h2>Search Patients</h2>
+    </div>
+    <div class="form-card">
+        <form method="GET" action="/search-patients">
+            <label>Patient Name</label>
+            <input type="text" name="name" value="<%= name %>" placeholder="Enter patient name">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    <div class="table-card">
+        <% if (patients.length) { %>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+                <% patients.forEach(patient => { %>
+                    <tr>
+                        <td><%= patient.name %></td>
+                        <td><%= patient.email %></td>
+                        <td><a class="action-button view" href="/patient-info/<%= patient._id %>">View</a></td>
+                    </tr>
+                <% }) %>
+            </table>
+        <% } else if (name) { %>
+            <p>No patients found for "<%= name %>".</p>
+        <% } else { %>
+            <p>Search for patients by name.</p>
+        <% } %>
+        <a class="back-link" href="/doctor">⬅ Back</a>
+    </div>
+</div>
+</body>
+</html>

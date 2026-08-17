@@ -1,0 +1,17 @@
+{
+  "name": "hospital-management",
+  "version": "1.0.0",
+  "description": "Hospital management system migrated from PHP to Node.js, Express, and MongoDB.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "connect-mongo": "^4.6.0",
+    "ejs": "^3.1.10",
+    "express": "^4.22.1",
+    "express-session": "^1.17.3",
+    "mongoose": "^7.6.0"
+  }
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Profile</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page-shell">
+    <div class="header-card">
+        <h2>Patient Profile</h2>
+    </div>
+    <div class="info-card-large">
+        <h3>Patient Details</h3>
+        <% if (patientDetails) { %>
+            <p><b>Name:</b> <%= patient.name %></p>
+            <p><b>Age:</b> <%= patientDetails.age %></p>
+            <p><b>Gender:</b> <%= patientDetails.gender %></p>
+            <p><b>Weight:</b> <%= patientDetails.weight %></p>
+            <p><b>Contact:</b> <%= patientDetails.contact %></p>
+            <p><b>Guardian:</b> <%= patientDetails.guardianContact %></p>
+        <% } else { %>
+            <p>No saved patient details found.</p>
+        <% } %>
+    </div>
+
+    <div class="info-card-large">
+        <h3>Appointments</h3>
+        <% if (appointments.length) { %>
+            <% appointments.forEach(app => { %>
+                <p><b><%= app.appointmentDate.toDateString() %></b> - <%= app.status %></p>
+            <% }) %>
+        <% } else { %>
+            <p>No appointment records found.</p>
+        <% } %>
+    </div>
+
+    <div class="info-card-large">
+        <h3>Prescriptions</h3>
+        <% if (prescriptions.length) { %>
+            <% prescriptions.forEach(prescription => { %>
+                <p><b><%= prescription.date.toDateString() %></b>: <%= prescription.medicines %> (<%= prescription.notes %>)</p>
+            <% }) %>
+        <% } else { %>
+            <p>No prescriptions available.</p>
+        <% } %>
+    </div>
+
+    <div class="info-card-large">
+        <h3>Billing</h3>
+        <% if (billing.length) { %>
+            <% billing.forEach(item => { %>
+                <p>Amount: ₹<%= item.amount %> - <%= item.status %></p>
+            <% }) %>
+        <% } else { %>
+            <p>No billing records available.</p>
+        <% } %>
+    </div>
+
+    <a class="back-link" href="/doctor">⬅ Back</a>
+</div>
+</body>
+</html>

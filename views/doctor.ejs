@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="dashboard-shell">
+    <div class="sidebar">
+        <h2>Doctor Panel</h2>
+        <a class="sidebar-item" href="/view-appointments"><span class="sidebar-icon">📅</span><span>Appointments</span></a>
+        <a class="sidebar-item" href="/add-prescription"><span class="sidebar-icon">📝</span><span>Add Prescription</span></a>
+        <a class="sidebar-item" href="/search-patients"><span class="sidebar-icon">🔍</span><span>Search Patients</span></a>
+        <a class="sidebar-item" href="/view-patient-details"><span class="sidebar-icon">🧾</span><span>Patient Details</span></a>
+        <a class="sidebar-item" href="/profile"><span class="sidebar-icon">👤</span><span>My Profile</span></a>
+        <a class="sidebar-item" href="/logout"><span class="sidebar-icon">🚪</span><span>Logout</span></a>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Welcome Doctor: <%= user %></h2>
+            <p class="subtext">Interactive profile, patient insights and appointment summaries in one view.</p>
+        </div>
+
+        <div class="cards-row">
+            <div class="stat-card">
+                <h4>Approved</h4>
+                <p><%= statusCounts.approved %></p>
+            </div>
+            <div class="stat-card">
+                <h4>Pending</h4>
+                <p><%= statusCounts.pending %></p>
+            </div>
+            <div class="stat-card">
+                <h4>Patient Bills Due</h4>
+                <p><%= pendingPayments %></p>
+            </div>
+            <div class="stat-card">
+                <h4>Patient Bill Value</h4>
+                <p>₹<%= totalPatientBillAmount %></p>
+            </div>
+        </div>
+
+        <div class="section-row">
+            <div class="notifications-panel">
+                <h3>Billing Alerts</h3>
+                <% if (pendingPayments > 0) { %>
+                    <p>You have <strong><%= pendingPayments %></strong> payment alerts from assigned patients.</p>
+                <% } else { %>
+                    <p>All assigned patient bills are up to date.</p>
+                <% } %>
+                <p class="subtext">These summaries help you know when patients may need payment follow-up or appointment reminders.</p>
+            </div>
+            <div class="table-card">
+                <h3>Recent Patient Bills</h3>
+                <p><strong>Paid:</strong> <%= paidPayments %> • <strong>Pending:</strong> <%= pendingPayments %></p>
+                <p><strong>Total billed value:</strong> ₹<%= totalPatientBillAmount %></p>
+            </div>
+        </div>
+
+        <div class="section-row">
+            <div class="chart-card">
+                <h3>Appointment Status</h3>
+                <canvas id="doctorChart"></canvas>
+            </div>
+            <div class="notifications-panel">
+                <h3>Notifications</h3>
+                <div id="notificationList">
+                    <% notifications.forEach(note => { %>
+                        <div class="notification-item">
+                            <strong><%= note.title %></strong>
+                            <p><%= note.message %></p>
+                            <span><%= note.time %></span>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-row">
+            <div class="table-card">
+                <h3>Upcoming Events</h3>
+                <ul class="event-list">
+                    <% upcomingAppointments.forEach(app => { %>
+                        <li>
+                            <strong><%= app.patient.name %></strong> – <%= new Date(app.appointmentDate).toLocaleString() %>
+                        </li>
+                    <% }) %>
+                    <% if (!upcomingAppointments.length) { %>
+                        <li>No upcoming appointments.</li>
+                    <% } %>
+                </ul>
+            </div>
+            <div class="table-card">
+                <h3>Patient Interaction</h3>
+                <div class="tab-row" id="patientTabs">
+                    <% patients.forEach((patient, index) => { %>
+                        <button class="tab-button <%= index === 0 ? 'active' : '' %>" data-patient="<%= patient._id %>"><%= patient.name %></button>
+                    <% }) %>
+                </div>
+                <div class="patient-details" id="patientDetails">
+                    <% if (patients.length) { %>
+                        <p><strong>Name:</strong> <%= patients[0].name %></p>
+                        <p><strong>Email:</strong> <%= patients[0].email %></p>
+                        <p><strong>Quick Links:</strong></p>
+                        <ul>
+                            <li><a href="/patient-info/<%= patients[0]._id %>">View profile</a></li>
+                            <li><a href="/view-patient-details">Medical history</a></li>
+                        </ul>
+                    <% } else { %>
+                        <p>No patients assigned yet.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+const chartData = <%- JSON.stringify(graphData) %>;
+new Chart(document.getElementById('doctorChart'), {
+    type: 'pie',
+    data: {
+        labels: ['Approved', 'Pending', 'Rejected'],
+        datasets: [{ data: chartData, backgroundColor: ['#198754', '#ffc107', '#dc3545'] }]
+    },
+    options: { responsive: true }
+});
+
+const patients = <%- JSON.stringify(patients) %>;
+const patientDetails = document.getElementById('patientDetails');
+const tabs = document.querySelectorAll('.tab-button');
+tabs.forEach(button => {
+    button.addEventListener('click', () => {
+        tabs.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        const patient = patients.find(p => p._id === button.dataset.patient);
+        if (!patient) return;
+        patientDetails.innerHTML = `
+            <p><strong>Name:</strong> ${patient.name}</p>
+            <p><strong>Email:</strong> ${patient.email}</p>
+            <p><strong>Quick Links:</strong></p>
+            <ul>
+                <li><a href='/patient-info/${patient._id}'>View profile</a></li>
+                <li><a href='/view-patient-details'>Medical history</a></li>
+            </ul>
+        `;
+    });
+});
+</script>
+<script src="/script.js"></script>
+</body>
+</html>

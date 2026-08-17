@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Receipt</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page-shell">
+    <div class="receipt-card">
+        <h2>Payment Receipt</h2>
+        <p><b>Patient:</b> <%= bill.patient.name %></p>
+        <p><b>Amount:</b> ₹<%= bill.amount %></p>
+        <p><b>Status:</b> <%= bill.status %></p>
+        <p><b>Transaction ID:</b> <%= txn %></p>
+        <button onclick="window.print()">🖨 Print Receipt</button>
+    </div>
+</div>
+</body>
+</html>

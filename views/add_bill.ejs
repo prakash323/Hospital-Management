@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Add Bill</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page-shell">
+    <div class="header-card">
+        <h2>Add Bill</h2>
+    </div>
+    <div class="form-card">
+        <form action="/add-bill" method="POST">
+            <label>Select Patient:</label>
+            <select name="patientId" required>
+                <% patients.forEach(patient => { %>
+                    <option value="<%= patient._id %>"><%= patient.name %></option>
+                <% }) %>
+            </select>
+
+            <label>Amount:</label>
+            <input type="number" name="amount" required>
+
+            <label>Status:</label>
+            <select name="status" required>
+                <option>Pending</option>
+                <option>Paid</option>
+            </select>
+            <button type="submit">Add Bill</button>
+        </form>
+        <a class="back-link" href="/admin">⬅ Back to Dashboard</a>
+    </div>
+</div>
+</body>
+</html>

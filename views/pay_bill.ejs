@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Pay Bill</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page-shell">
+    <div class="header-card">
+        <h2>My Bills</h2>
+    </div>
+    <div class="table-card">
+        <table>
+            <tr>
+                <th>Amount</th>
+                <th>Source</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            <% bills.forEach(bill => { %>
+                <tr>
+                    <td>₹<%= bill.amount %></td>
+                    <td><%= bill.source %></td>
+                    <td><%= bill.status %></td>
+                    <td>
+                        <% if (bill.status === 'Pending') { %>
+                            <a class="action-button approve" href="/payment-page/<%= bill._id %>">Pay Now</a>
+                        <% } else { %>
+                            Paid
+                        <% } %>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+        <a class="back-link" href="/patient">⬅ Back</a>
+    </div>
+</div>
+</body>
+</html>

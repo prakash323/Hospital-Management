@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page-shell profile-page">
+    <div class="profile-hero">
+        <div class="profile-avatar">🩺</div>
+        <div>
+            <h2><%= user.name %></h2>
+            <p class="profile-role"><span class="badge"><%= user.role.charAt(0).toUpperCase() + user.role.slice(1) %></span></p>
+            <% if (user.role === 'doctor') { %>
+                <p class="profile-specialization">Specialization: <strong><%= user.specialization || 'General' %></strong></p>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="info-card-large profile-grid">
+        <div class="profile-field">
+            <span>Name</span>
+            <strong><%= user.name %></strong>
+        </div>
+        <div class="profile-field">
+            <span>Email</span>
+            <strong><%= user.email %></strong>
+        </div>
+        <div class="profile-field">
+            <span>Role</span>
+            <strong><%= user.role.charAt(0).toUpperCase() + user.role.slice(1) %></strong>
+        </div>
+        <% if (user.role === 'doctor') { %>
+            <div class="profile-field">
+                <span>Specialization</span>
+                <strong><%= user.specialization || 'General' %></strong>
+            </div>
+        <% } %>
+    </div>
+
+    <div class="profile-actions">
+        <a class="button secondary" href="/<%= user.role %>">← Back to Dashboard</a>
+        <a class="button" href="/">Home</a>
+    </div>
+</div>
+</body>
+</html>

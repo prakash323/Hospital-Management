@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Add Patient Details</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page-shell">
+    <div class="header-card">
+        <h2>Add Patient Details</h2>
+    </div>
+    <div class="form-card">
+        <form action="/add-patient-details" method="POST">
+            <label>Age:</label>
+            <input type="number" name="age" required>
+            <label>Gender:</label>
+            <select name="gender" required>
+                <option>Male</option>
+                <option>Female</option>
+            </select>
+            <label>Weight (kg):</label>
+            <input type="number" name="weight" required>
+            <label>Contact Number:</label>
+            <input type="text" name="contact" required>
+            <label>Guardian Contact:</label>
+            <input type="text" name="guardian" required>
+            <button type="submit">Save Details</button>
+        </form>
+        <a class="back-link" href="/patient">⬅ Back to Dashboard</a>
+    </div>
+</div>
+</body>
+</html>

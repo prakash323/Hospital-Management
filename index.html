@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare HMS - Hospital Management System</title>
+    <style>
+        /* Your existing CSS here - paste your styles */
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .container { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); max-width: 400px; width: 90%; }
+        .tabs { display: flex; margin-bottom: 30px; }
+        .tab { flex: 1; padding: 15px; border: none; border-radius: 10px 10px 0 0; cursor: pointer; font-weight: bold; transition: all 0.3s; }
+        .tab.active { background: #007bff; color: white; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; }
+        input, select { width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
+        .role-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        .role-btn { flex: 1; padding: 12px; border: 2px solid #e1e5e9; border-radius: 10px; background: white; cursor: pointer; text-align: left; transition: all 0.3s; min-width: 80px; }
+        .role-btn.active { border-color: #007bff; background: #f0f8ff; }
+        .role-btn input { display: none; }
+        .role-icon { font-size: 20px; margin-right: 8px; }
+        button { width: 100%; padding: 15px; background: #007bff; color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+        button:hover { background: #0056b3; }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+        .dashboard { text-align: center; color: #333; }
+        .user-card { background: #f8f9fa; padding: 30px; border-radius: 15px; margin-top: 20px; }
+        h1 { color: #007bff; text-align: center; margin-bottom: 10px; }
+        h2 { color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login/Signup Section -->
+        <section id="auth-section" class="page-section active">
+            <h1>MediCare HMS</h1>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">Hospital Management System</p>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('login')">Login</button>
+                <button class="tab" onclick="switchTab('signup')">Sign Up</button>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="loginForm" style="display: block;">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            
+            <!-- Signup Form -->
+            <form id="signupForm" style="display: none;">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter full name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="signupEmail" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="signupPassword" placeholder="Create password" required>
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <div class="role-group">
+                        <label class="role-btn active">
+                            <span class="role-icon">👑</span> Admin
+                            <input type="radio" name="role" value="admin" checked>
+                        </label>
+                        <label class="role-btn">
+                            <span class="role-icon">👨‍⚕️</span> Doctor
+                            <input type="radio" name="role" value="doctor">
+                        </label>
+                        <label class="role-btn">
+                            <span class="role-icon">👤</span> Patient
+                            <input type="radio" name="role" value="patient">
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" id="createAccount">Create Account</button>
+            </form>
+        </section>
+        
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="page-section">
+            <h1>Welcome to Dashboard</h1>
+            <div class="user-card">
+                <h2 id="userName">User</h2>
+                <p id="userRole">Role</p>
+                <p id="userEmail">Email</p>
+                <button onclick="logout()">Logout</button>
+            </div>
+            <p>MediCare HMS Dashboard - Manage appointments, patients, etc. (Demo mode)</p>
+        </section>
+    </div>
+
+    <script>
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+            document.getElementById('signupForm').style.display = tab === 'signup' ? 'block' : 'none';
+        }
+        
+        // Role button styling
+        document.querySelectorAll('.role-btn input').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+                this.parentElement.classList.add('active');
+            });
+        });
+        
+        // Signup - Create Account (Demo backend)
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('fullName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const role = document.querySelector('input[name="role"]:checked').value;
+            
+            if (!name || !email || !password) {
+                alert('Please fill all fields!');
+                return;
+            }
+            
+            // "Backend" - Save to localStorage
+            const user = { name, email, password, role, created: new Date().toISOString() };
+            localStorage.setItem(email, JSON.stringify(user));
+            
+            alert(`✅ Account created for ${name} (${role})! Login now.`);
+            switchTab('login');
+            document.getElementById('loginEmail').focus();
+        });
+        
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const savedUser = localStorage.getItem(email);
+            
+            if (savedUser && JSON.parse(savedUser).password === password) {
+                const user = JSON.parse(savedUser);
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userRole').textContent = user.role.toUpperCase();
+                document.getElementById('userEmail').textContent = user.email;
+                
+                document.getElementById('auth-section').classList.remove('active');
+                document.getElementById('dashboard-section').classList.add('active');
+                history.pushState({page: 'dashboard'}, '', '/dashboard');
+            } else {
+                alert('❌ Invalid email/password!');
+            }
+        });
+        
+        // Logout
+        function logout() {
+            document.getElementById('dashboard-section').classList.remove('active');
+            document.getElementById('auth-section').classList.add('active');
+            document.querySelector('.tab').click(); // Reset to login
+            document.getElementById('loginForm').reset();
+        }
+        
+        // SPA Routing (fixes Netlify 404)
+        window.addEventListener('popstate', function(e) {
+            if (e.state && e.state.page === 'dashboard') {
+                document.getElementById('dashboard-section').classList.add('active');
+                document.getElementById('auth-section').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

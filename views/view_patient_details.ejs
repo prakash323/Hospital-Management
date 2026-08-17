@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Details</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page-shell">
+    <div class="header-card">
+        <h2>Patient Details</h2>
+    </div>
+    <div class="table-card">
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Weight</th>
+                <th>Contact</th>
+                <th>Guardian</th>
+            </tr>
+            <% details.forEach(item => { %>
+                <tr>
+                    <td><%= item.user.name %></td>
+                    <td><%= item.age %></td>
+                    <td><%= item.gender %></td>
+                    <td><%= item.weight %></td>
+                    <td><%= item.contact %></td>
+                    <td><%= item.guardianContact %></td>
+                </tr>
+            <% }) %>
+        </table>
+        <a class="back-link" href="/doctor">⬅ Back</a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Appointments</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page-shell">
+    <div class="header-card">
+        <h2>Appointments</h2>
+    </div>
+    <div class="table-card">
+        <table>
+            <tr>
+                <th>Patient</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
+                <th>Details</th>
+            </tr>
+            <% appointments.forEach(appointment => { %>
+                <tr>
+                    <td><%= appointment.patient.name %></td>
+                    <td><%= appointment.appointmentDate.toDateString() %></td>
+                    <td><%= appointment.status %></td>
+                    <td>
+                        <a class="action-button approve" href="/update-status/<%= appointment._id %>/Approved">Approve</a>
+                        <a class="action-button reject" href="/update-status/<%= appointment._id %>/Rejected">Reject</a>
+                    </td>
+                    <td>
+                        <a class="action-button view" href="/patient-info/<%= appointment.patient._id %>">View</a>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+        <a class="back-link" href="/doctor">⬅ Back</a>
+    </div>
+</div>
+</body>
+</html>

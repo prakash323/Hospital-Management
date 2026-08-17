@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="dashboard-shell">
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <a class="sidebar-item" href="/add-bill"><span class="sidebar-icon">💰</span><span>Add Bill</span></a>
+        <a class="sidebar-item" href="/view-appointments"><span class="sidebar-icon">📅</span><span>Appointments</span></a>
+        <a class="sidebar-item" href="/view-billing"><span class="sidebar-icon">💳</span><span>Payment Status</span></a>
+        <a class="sidebar-item" href="/users"><span class="sidebar-icon">👥</span><span>View Users</span></a>
+        <a class="sidebar-item" href="/profile"><span class="sidebar-icon">👤</span><span>My Profile</span></a>
+        <a class="sidebar-item" href="/logout"><span class="sidebar-icon">🚪</span><span>Logout</span></a>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Welcome Admin: <%= user %></h2>
+            <p class="subtext">A single place to manage patients, doctors, performance and tasks.</p>
+        </div>
+        <div class="cards-row">
+            <div class="stat-card">
+                <h4>Total Patients</h4>
+                <p><%= patientCount %></p>
+            </div>
+            <div class="stat-card">
+                <h4>Total Doctors</h4>
+                <p><%= doctorCount %></p>
+            </div>
+            <div class="stat-card">
+                <h4>Pending Bills</h4>
+                <p><%= pendingBilling %></p>
+            </div>
+            <div class="stat-card">
+                <h4>Collected Amount</h4>
+                <p>₹<%= billedAmount %></p>
+            </div>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-card">
+                <h3>Doctor Performance</h3>
+                <canvas id="performanceChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Task Status Overview</h3>
+                <canvas id="taskChart"></canvas>
+            </div>
+        </div>
+
+        <div class="section-row">
+            <div class="table-card">
+                <h3>Task Manager</h3>
+                <form action="/tasks" method="POST" class="task-form">
+                    <div class="form-grid">
+                        <input type="text" name="title" placeholder="Task title" required>
+                        <select name="assignedTo" required>
+                            <option value="">Assign to doctor</option>
+                            <% doctors.forEach(doctor => { %>
+                                <option value="<%= doctor._id %>"><%= doctor.name %></option>
+                            <% }) %>
+                        </select>
+                        <input type="date" name="deadline" required>
+                        <input type="text" name="description" placeholder="Task description">
+                    </div>
+                    <button type="submit">Create Task</button>
+                </form>
+                <table>
+                    <tr>
+                        <th>Title</th>
+                        <th>Assigned To</th>
+                        <th>Status</th>
+                        <th>Deadline</th>
+                    </tr>
+                    <% tasks.forEach(task => { %>
+                        <tr>
+                            <td><%= task.title %></td>
+                            <td><%= task.assignedTo ? task.assignedTo.name : 'Unassigned' %></td>
+                            <td><%= task.status %></td>
+                            <td><%= task.deadline ? task.deadline.toDateString() : 'N/A' %></td>
+                        </tr>
+                    <% }) %>
+                </table>
+            </div>
+            <div class="table-card">
+                <h3>Top Doctor Performance</h3>
+                <table>
+                    <tr>
+                        <th>Doctor</th>
+                        <th>Appointments</th>
+                        <th>Approved</th>
+                    </tr>
+                    <% doctorPerformance.forEach(item => { %>
+                        <tr>
+                            <td><%= item.doctorName || 'Unknown' %></td>
+                            <td><%= item.total %></td>
+                            <td><%= item.approved %></td>
+                        </tr>
+                    <% }) %>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+const doctorLabels = <%- JSON.stringify(doctorPerformance.map(item => item.doctorName || 'Unknown')) %>;
+const doctorValues = <%- JSON.stringify(doctorPerformance.map(item => item.total)) %>;
+const taskValues = [<%= openTasks %>, <%= overdueTasks %>, <%= taskCount - openTasks - overdueTasks %>];
+const taskLabels = ['Open', 'Overdue', 'Other'];
+
+new Chart(document.getElementById('performanceChart'), {
+    type: 'bar',
+    data: {
+        labels: doctorLabels,
+        datasets: [{ label: 'Appointments', data: doctorValues, backgroundColor: '#2d6cdf' }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } }
+    }
+});
+
+new Chart(document.getElementById('taskChart'), {
+    type: 'doughnut',
+    data: {
+        labels: taskLabels,
+        datasets: [{ data: taskValues, backgroundColor: ['#2d6cdf', '#dc3545', '#198754'] }]
+    },
+    options: { responsive: true }
+});
+</script>
+<script src="/script.js"></script>
+</body>
+</html>

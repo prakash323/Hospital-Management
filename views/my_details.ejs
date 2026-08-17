@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>My Details</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page-shell">
+    <div class="header-card">
+        <h2>My Details</h2>
+    </div>
+    <div class="info-card-large">
+        <% if (details) { %>
+            <p><b>Age:</b> <%= details.age %></p>
+            <p><b>Gender:</b> <%= details.gender %></p>
+            <p><b>Weight:</b> <%= details.weight %></p>
+            <p><b>Contact:</b> <%= details.contact %></p>
+            <p><b>Guardian Contact:</b> <%= details.guardianContact %></p>
+        <% } else { %>
+            <p>No details have been added yet. Please add your details.</p>
+        <% } %>
+    </div>
+    <a class="back-link" href="/patient">⬅ Back to Dashboard</a>
+</div>
+</body>
+</html>

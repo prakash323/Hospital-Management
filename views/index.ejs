@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>MediCare HMS</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="login-page">
+<div class="container login-shell">
+    <div class="card">
+        <h1>MediCare HMS</h1>
+        <p>Hospital Management System</p>
+
+        <div class="tabs">
+            <button id="loginTab" class="active" onclick="showLogin()">Login</button>
+            <button id="signupTab" onclick="showSignup()">Sign Up</button>
+        </div>
+
+        <div id="loginForm" class="active">
+            <form action="/login" method="POST">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter email" required>
+
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter password" required>
+
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <div id="signupForm">
+            <form action="/signup" method="POST">
+                <label>Full Name</label>
+                <input type="text" name="name" placeholder="Full name" required>
+
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter your email id" required>
+
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+
+                <label>Role</label>
+                <input type="hidden" id="roleInput" name="role" value="patient">
+
+                <div class="roles">
+                    <div class="role" onclick="selectRole(this, 'admin')">🏥 Admin</div>
+                    <div class="role" onclick="selectRole(this, 'doctor')">🩺 Doctor</div>
+                    <div class="role active-role" onclick="selectRole(this, 'patient')">👤 Patient</div>
+                </div>
+
+                <div id="specializationBox" style="display:none; margin-top: 10px;">
+                    <label>Specialization</label>
+                    <input type="text" name="specialization" placeholder="e.g. General Physician">
+                </div>
+
+                <button type="submit">Create Account</button>
+            </form>
+        </div>
+
+        <% if (error) { %>
+            <p class="error"><%= error %></p>
+        <% } %>
+    </div>
+</div>
+
+<script src="/script.js"></script>
+</body>
+</html>

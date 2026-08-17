@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="dashboard-shell">
+    <div class="sidebar">
+        <h2>Patient Panel</h2>
+        <a class="sidebar-item" href="/book-appointment"><span class="sidebar-icon">📆</span><span>Book Appointment</span></a>
+        <a class="sidebar-item" href="/my-appointments"><span class="sidebar-icon">📋</span><span>My Appointments</span></a>
+        <a class="sidebar-item" href="/view-prescription"><span class="sidebar-icon">💊</span><span>Prescription</span></a>
+        <a class="sidebar-item" href="/pay-bill"><span class="sidebar-icon">�</span><span>Pay Bill</span></a>
+        <a class="sidebar-item" href="/add-patient-details"><span class="sidebar-icon">✍️</span><span>Add My Details</span></a>
+        <a class="sidebar-item" href="/my-details"><span class="sidebar-icon">📁</span><span>My Details</span></a>
+        <a class="sidebar-item" href="/profile"><span class="sidebar-icon">👤</span><span>My Profile</span></a>
+        <a class="sidebar-item" href="/logout"><span class="sidebar-icon">🚪</span><span>Logout</span></a>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Welcome Patient: <%= user %></h2>
+            <p class="subtext">Track your health, manage appointments, and share feedback easily.</p>
+        </div>
+
+        <div class="cards-row">
+            <div class="stat-card">
+                <h4>Upcoming Visits</h4>
+                <p><%= upcomingAppointments.length %></p>
+            </div>
+            <div class="stat-card">
+                <h4>Health Check</h4>
+                <p><%= details ? 'Active' : 'Not Set' %></p>
+            </div>
+            <div class="stat-card">
+                <h4>Pending Bills</h4>
+                <p><%= pendingBillCount %></p>
+            </div>
+            <div class="stat-card">
+                <h4>Outstanding ₹</h4>
+                <p>₹<%= outstandingAmount %></p>
+            </div>
+        </div>
+
+        <div class="section-row">
+            <div class="table-card">
+                <h3>Quick Payment</h3>
+                <% if (latestBill && latestBill.status === 'Pending') { %>
+                    <div class="payment-card">
+                        <h4>Latest Bill</h4>
+                        <p>Amount due: <strong>₹<%= latestBill.amount %></strong></p>
+                        <p>Created: <%= new Date(latestBill.createdAt).toLocaleDateString() %></p>
+                        <a class="action-button approve" href="/payment-page/<%= latestBill._id %>">Pay Now</a>
+                    </div>
+                <% } else if (latestBill) { %>
+                    <div class="payment-card paid">
+                        <h4>Latest Bill</h4>
+                        <p>Amount paid: <strong>₹<%= latestBill.amount %></strong></p>
+                        <p>Status: <span class="paid-label">Paid</span></p>
+                        <a class="action-button" href="/pay-bill">View Bill History</a>
+                    </div>
+                <% } else { %>
+                    <div class="payment-card">
+                        <h4>No outstanding bills</h4>
+                        <p>You have no billing records at the moment.</p>
+                        <a class="action-button" href="/pay-bill">View Billing</a>
+                    </div>
+                <% } %>
+            </div>
+            <div class="schedule-card">
+                <h3>Payment Methods</h3>
+                <ul class="payment-options">
+                    <li>💳 Card Payment</li>
+                    <li>📱 UPI Payment</li>
+                    <li>✅ Secure checkout</li>
+                    <li>⏱ Fast confirmation</li>
+                </ul>
+                <p class="subtext">Choose card or UPI when you go to billing. Your payment status updates immediately in doctor and admin views.</p>
+            </div>
+        </div>
+
+        <div class="section-row">
+            <div class="chart-card">
+                <h3>Health Tracking</h3>
+                <canvas id="healthChart"></canvas>
+            </div>
+            <div class="schedule-card">
+                <h3>Appointment Scheduler</h3>
+                <p>Select a doctor and a time slot for booking from available schedules.</p>
+                <% doctors.forEach(doctor => { %>
+                    <div class="schedule-item hover-info">
+                        <strong><%= doctor.name %></strong>
+                        <p>Available slots: 09:00, 11:00, 14:00</p>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+
+        <div class="section-row">
+            <div class="table-card">
+                <h3>Recent Appointments</h3>
+                <table>
+                    <tr><th>Doctor</th><th>Date</th><th>Status</th></tr>
+                    <% upcomingAppointments.forEach(app => { %>
+                        <tr>
+                            <td><%= app.doctor.name %></td>
+                            <td><%= new Date(app.appointmentDate).toLocaleString() %></td>
+                            <td><%= app.status %></td>
+                        </tr>
+                    <% }) %>
+                    <% if (!upcomingAppointments.length) { %>
+                        <tr><td colspan="3">No upcoming appointments.</td></tr>
+                    <% } %>
+                </table>
+            </div>
+            <div class="feedback-card">
+                <h3>Appointment Feedback</h3>
+                <form action="/feedback" method="POST" class="feedback-form">
+                    <label>Rate your last visit</label>
+                    <select name="rating" required>
+                        <option value="">Choose</option>
+                        <option value="5">5 - Excellent</option>
+                        <option value="4">4 - Good</option>
+                        <option value="3">3 - Fair</option>
+                        <option value="2">2 - Poor</option>
+                        <option value="1">1 - Very Poor</option>
+                    </select>
+                    <label>Doctor</label>
+                    <select name="doctorId">
+                        <option value="">Any doctor</option>
+                        <% doctors.forEach(doctor => { %>
+                            <option value="<%= doctor._id %>"><%= doctor.name %></option>
+                        <% }) %>
+                    </select>
+                    <label>Your comments</label>
+                    <textarea name="comments" placeholder="Share your experience"></textarea>
+                    <button type="submit">Submit Feedback</button>
+                </form>
+                <div class="feedback-history">
+                    <h4>Recent Feedback</h4>
+                    <% if (recentFeedback.length) { %>
+                        <% recentFeedback.forEach(item => { %>
+                            <div class="feedback-entry">
+                                <strong><%= item.rating %> stars</strong>
+                                <p><%= item.comments %></p>
+                                <small><%= item.doctor ? item.doctor.name : 'General' %></small>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p>No recent feedback yet.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+new Chart(document.getElementById('healthChart'), {
+    type: 'line',
+    data: {
+        labels: ['Week 1', 'Week 2', 'Week 3'],
+        datasets: [
+            { label: 'Weight', data: <%- JSON.stringify(healthMetrics.weight) %>, borderColor: '#2d6cdf', backgroundColor: 'rgba(45,108,223,0.2)', tension: 0.4 },
+            { label: 'Blood Pressure', data: <%- JSON.stringify(healthMetrics.bp) %>, borderColor: '#198754', backgroundColor: 'rgba(25,135,84,0.2)', tension: 0.4 }
+        ]
+    },
+    options: { responsive: true }
+});
+</script>
+<script src="/script.js"></script>
+</body>
+</html>
